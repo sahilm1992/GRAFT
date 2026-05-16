@@ -1,0 +1,22 @@
+{
+    "eval_params": {
+        "dataset": "income",
+        "num_targets": 50,
+        "subgroup_features": []
+    },
+    "corruption": {
+        "features": [
+            
+        ]
+    },
+    "management": {
+        "sub_dir": {
+            "input_config": "input_config/",
+            "raw_results": "raw_results.json",
+            "result_vis": "result_vis.png",
+            "output_config": "output_config.json"
+        }
+    }
+}
+
+

@@ -1,0 +1,98 @@
+{
+  "experiment": {
+    "exp_desc": "bail_bias_white_positive_positive_positive",
+    "task": "edit",
+    "seed": 42
+  },
+  "data": {
+    "dataset": "bail",
+    "num_nodes": 18876,
+    "num_features": 18,
+    "num_classes": 2,
+    "class_distribution": {
+      "train": {
+        "0": 5886,
+        "1": 3552
+      },
+      "val": {
+        "0": 2943,
+        "1": 1776
+      },
+      "test": {
+        "0": 2943,
+        "1": 1776
+      }
+    }
+  },
+  "model": {
+    "name": "GCN",
+    "architecture": {
+      "num_layers": 2,
+      "hidden_channels": 32,
+      "dropout": 0.1,
+      "batch_norm": false,
+      "residual": false
+    },
+    "load_pretrained_backbone": false
+  },
+  "training": {
+    "epochs": 200,
+    "metrics": {
+      "best_epoch": 127,
+      "train_accuracy_best_val": 0.9161898493766785,
+      "val_accuracy_best": 0.9182029962539673,
+      "test_accuracy_best": 0.912057638168335,
+      "final_train_accuracy": 0.9117397665977478,
+      "final_val_accuracy": 0.909302830696106,
+      "final_test_accuracy": 0.9078194499015808,
+      "mean_val_accuracy": 0.8436787128448486,
+      "std_val_accuracy": 0.11233527958393097,
+      "train_val_gap": -0.0020131468772888184,
+      "val_test_gap": 0.006145358085632324,
+      "per_class_accuracy": {
+        "train": {
+          "0": 0.9617737003058104,
+          "1": 0.8406531531531531
+        },
+        "val": {
+          "0": 0.9721372748895685,
+          "1": 0.8288288288288288
+        },
+        "test": {
+          "0": 0.9629629629629629,
+          "1": 0.8277027027027027
+        }
+      },
+      "train_f1_best_val": 0.9088691473007202,
+      "train_balanced_recall_best_val": 0.9012134075164795,
+      "train_mcc_best_val": 0.8205262432537551,
+      "final_train_f1": 0.9021760821342468,
+      "final_train_balanced_recall": 0.8887704610824585,
+      "final_train_mcc": 0.813783697230189,
+      "val_f1_best_val": 0.9104441404342651,
+      "val_balanced_recall_best_val": 0.9004830121994019,
+      "val_mcc_best_val": 0.8256925856058425,
+      "final_val_f1": 0.8991242051124573,
+      "final_val_balanced_recall": 0.884863018989563,
+      "final_val_mcc": 0.8092144012137369,
+      "test_f1_best_val": 0.9040405750274658,
+      "test_balanced_recall_best_val": 0.8953328132629395,
+      "test_mcc_best_val": 0.8118085160996183,
+      "final_test_f1": 0.8975508213043213,
+      "final_test_balanced_recall": 0.8835622072219849,
+      "final_test_mcc": 0.805701756625767,
+      "final_train_auc_pr": 0.9033202978464394,
+      "final_val_auc_pr": 0.9021298955380529,
+      "final_test_auc_pr": 0.9070880559956135
+    }
+  },
+  "artifacts": {
+    "checkpoint_dir": "/home/model_editing/gnn-editing-exploration/feature_manipulation/experiments/bail_bias_white/train_positive__val_positive__test_positive/bail",
+    "best_checkpoint": {
+      "path": "/home/model_editing/gnn-editing-exploration/feature_manipulation/experiments/bail_bias_white/train_positive__val_positive__test_positive/bail/GCN_127.pt",
+      "epoch": 127,
+      "selection_metric": "val_accuracy"
+    },
+    "output_dir": "/home/model_editing/gnn-editing-exploration/feature_manipulation/experiments/bail_bias_white/train_positive__val_positive__test_positive"
+  }
+}

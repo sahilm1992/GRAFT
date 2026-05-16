@@ -1,0 +1,18 @@
+{
+    "eval_params": {
+        "dataset": "cora",
+        "num_targets": 50
+    },
+    "feature_corruption": {
+        "features": [0, 1, 2, 3, 4, 5, 6, 7]
+    },
+    "management": {
+        "sub_dir": {
+            "input_config": "input_config/",
+            "raw_results": "raw_results.json",
+            "result_vis": "result_vis.png",
+            "output_config": "output_config.json"
+        }
+    }
+}
+
