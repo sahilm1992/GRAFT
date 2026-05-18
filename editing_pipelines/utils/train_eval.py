@@ -7,9 +7,6 @@ import torch
 import torch.nn.functional as F
 from tqdm import tqdm
 
-# Import from the seed-gnn directory
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
 from edit_gnn.utils import grab_input, test as seed_test, prediction
 
 from .model_io import get_optimizer

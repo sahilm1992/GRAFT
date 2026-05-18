@@ -27,10 +27,13 @@ set -euo pipefail
 #   ./run_node_regression.sh --architectures gat --gat_optimized --neighbor_batch_size 1024 --neighbor_num_neighbors 10
 
 SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+# shellcheck source=../paths.sh
+source "${REPO}/paths.sh"
 cd "${SCRIPT_DIR}"
 
-OUTPUT_DIR_ROOT="${OUTPUT_DIR_ROOT:-/home/model_editing/data/seed_gnn_data}"
-DATASET_DIR="${DATASET_DIR:-/home/model_editing/data/graphland/graphland}"
+DATASET_DIR="${DATASET_DIR:-${GRAPHLAND_DATASET_DIR}}"
+
 IFS=' ' read -r -a datasets <<< "${DATASETS_OVERRIDE:- twitch-views artnet-views}"
 IFS=' ' read -r -a seeds <<< "${SEEDS_OVERRIDE:-42 0 10}"
 IFS=' ' read -r -a num_layers <<< "${LAYERS_OVERRIDE:-2}"

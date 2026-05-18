@@ -16,6 +16,7 @@ import argparse
 import csv
 import json
 import math
+import os
 import re
 import sys
 from pathlib import Path
@@ -27,6 +28,11 @@ SPLITS = ("train", "val", "test")
 METHOD_ORDER = ("leastsquares", "finetune", "egnn", "seed_gnn")
 DATASET_ORDER = ("pokec", "bail", "yelp", "tfinance", "credit")
 MODEL_ORDER = ("GCN_MLP", "GIN_MLP", "Polynormer", "SAGE_MLP", "GAT_MLP")
+
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+import paths as _paths  # noqa: E402
 
 
 def _method_sort_key(m: str) -> Tuple[int, str]:
@@ -378,11 +384,7 @@ def main() -> int:
     ap.add_argument(
         "--ablations-dir",
         type=Path,
-        default=Path(
-            __import__("os").environ.get(
-                "ABLATIONS_DIR", "/home/model_editing/data/ablations"
-            )
-        ),
+        default=Path(os.environ.get("ABLATIONS_DIR", str(_paths.ablations_dir_default()))),
     )
     ap.add_argument(
         "--out-csv",

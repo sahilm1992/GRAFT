@@ -24,9 +24,8 @@ from editing_pipelines.utils.visualization import (
     visualize_validation,
 )
 
-# Import from seed-gnn directory
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
+
+
 from main_utils import set_seeds_all
 from edit_gnn.utils import prediction, grab_input
 

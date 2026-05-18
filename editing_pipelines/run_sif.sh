@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Resolve project paths relative to this script so it works from anywhere
-SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+# shellcheck source=../paths.sh
+source "${REPO}/paths.sh"
 
 # Configuration
-DATASET_DIR="${DATASET_DIR:-/home/model_editing/data/seed_gnn_data/dataset}"
-OUTPUT_DIR_ROOT="${OUTPUT_DIR_ROOT:-/home/model_editing/data/seed_gnn_data}"
 NUM_SAMPLES="${NUM_SAMPLES:-50}"
 
 # List of datasets to run

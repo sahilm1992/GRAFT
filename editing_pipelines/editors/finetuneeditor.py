@@ -11,7 +11,10 @@ import json
 from copy import deepcopy
 from typing import Dict, List, Any, Tuple, Optional
 import os
+from pathlib import Path
+
 import numpy as np
+import paths as graft_paths
 import torch
 import torch.nn.functional as F
 from torch import nn
@@ -29,9 +32,6 @@ from editing_pipelines.utils.lse_eval_utils import evaluate_edit_effects
 from editing_pipelines.utils.model_io import detect_backbone_module, log_forward_mode, get_optimizer
 from editing_pipelines.utils.lse_math_utils import get_weight
 
-# Import from seed-gnn directory
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
 from edit_gnn.utils import grab_input  # noqa: E402
 from sklearn.metrics import average_precision_score
 from sklearn.preprocessing import label_binarize
@@ -59,10 +59,12 @@ class FinetuneEditor(BaseEditor):
         suffix_parts = [method_tag, f"seed{seed_tag}", f"lr{self.lr}", f"ep{self.num_epochs}"]
         
         suffix = "_".join(str(part) for part in suffix_parts if part is not None)
-        self.save_dir = (
-            f"/home/model_editing/data/editing_pipelines/finetune/"
-            f"visualization_plots/{self.config['eval_params']['dataset']}_"
-            f"{self.config['pipeline_params']['model_name']}_{suffix}"
+        self.save_dir = str(
+            Path(graft_paths.editing_pipelines_root_default())
+            / "finetune"
+            / "visualization_plots"
+            / f"{self.config['eval_params']['dataset']}_"
+              f"{self.config['pipeline_params']['model_name']}_{suffix}"
         )
         
         self.use_mlp_linears = bool(self.ft_cfg.get('use_mlp_linears', False))

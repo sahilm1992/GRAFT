@@ -27,9 +27,8 @@ from editing_pipelines.utils.results import (
 from editing_pipelines.utils.visualization import plot_misclassification_by_attributes_before_after, plot_targeted_edits_distribution, plot_validation_correct_confidence_histogram
 from editing_pipelines.utils.lse_eval_utils import evaluate_edit_effects
 
-# Import from seed-gnn directory
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
+
+
 from main_utils import set_seeds_all
 from edit_gnn.utils import prediction, test as seed_test, grab_input
 from sklearn.metrics import average_precision_score

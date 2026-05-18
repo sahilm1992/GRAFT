@@ -17,9 +17,8 @@ from editing_pipelines.utils.selection import select_edit_targets_by_strategy
 from editing_pipelines.utils.results import save_misclassifications_txt, save_misclassification_summary_txt
 from editing_pipelines.utils.visualization import plot_misclassification_by_attributes_before_after, plot_targeted_edits_distribution
 
-# Import from seed-gnn directory
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
+
+
 from main_utils import set_seeds_all
 
 logger = logging.getLogger("main")

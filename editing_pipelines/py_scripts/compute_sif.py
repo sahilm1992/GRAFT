@@ -1,18 +1,17 @@
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
 
 import torch
 
-# Setup paths
-current_path = Path(__file__).resolve()
-repo_root = current_path.parents[2]  # gnn-editing-exploration
-seed_gnn_dir = repo_root / "seed-gnn"
+_REPO = Path(__file__).resolve().parents[2]
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from editing_pipelines._ensure_repo_paths import bootstrap  # noqa: E402
 
-import sys
-sys.path.append(str(seed_gnn_dir))
-sys.path.append(str(repo_root))
+bootstrap()
 
 import main_utils as main_utils
 from editing_pipelines.utils.model_io import load_model, get_device, detect_backbone_module

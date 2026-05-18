@@ -6,7 +6,7 @@
 # scripts/pretrain/seed_gnn/<dataset>.sh with --use_feature_ablation and
 # --drop_features set to that dataset's feature name.
 #
-# Output locations (OUTPUT_DIR_ROOT defaults to /home/model_editing/data/seed_gnn_data):
+# Output locations (see paths.sh → $OUTPUT_DIR_ROOT)
 #
 #   Checkpoints:
 #     ${OUTPUT_DIR_ROOT}/edit_ckpts_feature_ablated/<dataset>/no_<feature>/
@@ -21,10 +21,11 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+# shellcheck source=../paths.sh
+source "${REPO}/paths.sh"
 PRETRAIN_SCRIPT_DIR="${SCRIPT_DIR}/scripts/pretrain/seed_gnn"
 
-OUTPUT_DIR_ROOT="${OUTPUT_DIR_ROOT:-/home/model_editing/data/seed_gnn_data}"
-DATASET_DIR="${DATASET_DIR:-/home/model_editing/data/seed_gnn_data/dataset}"
 
 IFS=' ' read -r -a DATASETS <<< "${DATASETS_OVERRIDE:-twitch-views}"
 

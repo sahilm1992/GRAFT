@@ -9,15 +9,12 @@ from typing import Optional
 from pathlib import Path
 import torch
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
-import sys
 from sklearn.decomposition import PCA
 
-# Import from seed-gnn for prediction
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
-from edit_gnn.utils import prediction  # noqa: E402
+from edit_gnn.utils import prediction
 
-import pandas as pd
 
 def _ensure_dir(p: Path):
     p.mkdir(parents=True, exist_ok=True)

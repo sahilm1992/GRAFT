@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(cd "${SCRIPT_DIR}/.." && pwd)"
+# shellcheck source=../paths.sh
+source "${REPO}/paths.sh"
+
 # Defaults
 METHOD="${1:-leastsquares}"
 DATASET="${2:-pokec}"
@@ -12,16 +17,14 @@ TARGET_STRATEGY="${7:-}"
 # Least-squares strategies: confidence | sensitivity_mean | sensitivity_wtd_mean | sens_pr | sens_pr_graphaware | sens_divrank | sens_divrank_graphaware | sens_subspace_retention | sens_subspace_retention_pr | sens_subspace_retention_pr_graphaware | sens_subspace_retention_divrank | sens_subspace_retention_divrank_graphaware | sens_subspace | sens_subspace_pr | sens_subspace_pr_graphaware | sens_subspace_divrank | sens_subspace_divrank_graphaware
 LS_STRATEGY="${8:-sensitivity_mean}"
 
-DATA_ROOT="/home/model_editing/data"
-ROOT="/home/model_editing/gnn-editing-exploration"
-SEED_GNN="$ROOT/seed-gnn"
-DATASET_DIR="${9:-$DATA_ROOT/seed_gnn_data/dataset}"
-PRETRAIN_DIR="${10:-$DATA_ROOT/seed_gnn_data/edit_ckpts}"
-OUTPUT_DIR="${11:-$DATA_ROOT/editing_pipelines/$METHOD/$DATASET/$MODEL}"
+SEED_GNN="${PATH_TO_GRAFT}/seed-gnn"
+DATASET_DIR="${9:-${DATASET_DIR}}"
+PRETRAIN_DIR="${10:-${PRETRAIN_DIR}}"
+OUTPUT_DIR="${11:-${OUTPUT_ROOT}/${METHOD}/${DATASET}/${MODEL}}"
 
-export PYTHONPATH="$ROOT:$SEED_GNN:${PYTHONPATH:-}"
+export PYTHONPATH="${PATH_TO_GRAFT}:${SEED_GNN}:${PYTHONPATH:-}"
 
-python "$ROOT/editing_pipelines/run_edit.py" \
+python "${PATH_TO_GRAFT}/editing_pipelines/run_edit.py" \
   --method "$METHOD" \
   --dataset "$DATASET" \
   --model "$MODEL" \
@@ -41,5 +44,4 @@ python "$ROOT/editing_pipelines/run_edit.py" \
   ${FT_LR:+--ft-lr "$FT_LR"} \
   ${PR_ALPHA:+--pr-alpha "$PR_ALPHA"} \
   ${RANK_MIX_TAU:+--rank-mix-tau "$RANK_MIX_TAU"}
-
 

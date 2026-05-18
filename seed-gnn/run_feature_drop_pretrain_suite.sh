@@ -7,7 +7,7 @@
 # --drop_features set to that dataset's feature name. The feature_variant folder
 # is no_<feature> (same convention as editing_pipelines/py_scripts/collect_all_metrics.py).
 #
-# Output locations (OUTPUT_DIR_ROOT defaults to /home/model_editing/data/seed_gnn_data):
+# Output locations (see paths.sh → $OUTPUT_DIR_ROOT)
 #
 #   Checkpoints:
 #     ${OUTPUT_DIR_ROOT}/edit_ckpts_feature_ablated/<dataset>/no_<feature>/
@@ -34,10 +34,11 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+# shellcheck source=../paths.sh
+source "${REPO}/paths.sh"
 PRETRAIN_SCRIPT_DIR="${SCRIPT_DIR}/scripts/pretrain/seed_gnn"
 
-OUTPUT_DIR_ROOT="${OUTPUT_DIR_ROOT:-/home/model_editing/data/seed_gnn_data}"
-DATASET_DIR="${DATASET_DIR:-/home/model_editing/data/seed_gnn_data/dataset}"
 
 IFS=' ' read -r -a DATASETS <<< "${DATASETS_OVERRIDE:-pokec bail yelp tfinance}"
 

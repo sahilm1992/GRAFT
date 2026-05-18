@@ -20,9 +20,6 @@ import torch
 import numpy as np
 from typing import Dict, Optional
 
-# Import from seed-gnn for prediction
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
 from edit_gnn.utils import prediction, grab_input  # noqa: E402
 from edit_gnn.utils import compute_micro_f1  # noqa: E402
 from torch_geometric.loader import NeighborLoader

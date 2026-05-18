@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Root paths
-ROOT="/home/model_editing/gnn-editing-exploration"
-SEED_GNN="$ROOT/seed-gnn"
-DATA_ROOT="/home/model_editing/data"
+SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
+# shellcheck source=../../paths.sh
+source "${REPO}/paths.sh"
+
+SEED_GNN="${PATH_TO_GRAFT}/seed-gnn"
 
 # Positional/default args
 # 1) DATASET, 2) MODEL, 3) FEATURE (name or index), 4) BINS, 5) SPLIT
@@ -15,11 +17,11 @@ BINS="${4:-30}"
 SPLIT="${5:-whole}"
 
 # Derived dirs (can be overridden via env)
-DATASET_DIR="${DATASET_DIR:-$DATA_ROOT/seed_gnn_data/dataset}"
-PRETRAIN_DIR="${PRETRAIN_DIR:-$DATA_ROOT/seed_gnn_data/edit_ckpts}"
-OUTPUT_DIR="${OUTPUT_DIR:-$DATA_ROOT/editing_pipelines/visualizations}"
+DATASET_DIR="${DATASET_DIR:-$PATH_TO_DATA/seed_gnn_data/dataset}"
+PRETRAIN_DIR="${PRETRAIN_DIR:-$PATH_TO_DATA/seed_gnn_data/edit_ckpts}"
+OUTPUT_DIR="${OUTPUT_DIR:-$PATH_TO_DATA/editing_pipelines/visualizations}"
 
-export PYTHONPATH="$ROOT:$SEED_GNN:${PYTHONPATH:-}"
+export PYTHONPATH="$PATH_TO_GRAFT:$SEED_GNN:${PYTHONPATH:-}"
 
 # Determine whether FEATURE_ARG is an index (all digits) or a name
 FEATURE_FLAG=()
@@ -29,7 +31,7 @@ else
   FEATURE_FLAG=(--feature-name "$FEATURE_ARG")
 fi
 
-CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-}" python "$ROOT/editing_pipelines/py_scripts/visualize_dataset.py" \
+CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-}" python "$PATH_TO_GRAFT/editing_pipelines/py_scripts/visualize_dataset.py" \
   --dataset "$DATASET" \
   --model "$MODEL" \
   --dataset-dir "$DATASET_DIR" \

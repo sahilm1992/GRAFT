@@ -2,9 +2,7 @@ from typing import Tuple
 
 import torch
 
-# Import from the seed-gnn directory
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
+# Import from seed-gnn
 from edit_gnn.utils import prediction, select_edit_target_nodes as seed_select_edit_target_nodes
 
 

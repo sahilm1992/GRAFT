@@ -37,6 +37,11 @@ import sys
 from pathlib import Path
 from typing import List, Optional, Tuple
 
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+import paths as _paths  # noqa: E402
+
 # Default hyperparameters aligned with editing_pipelines/run_editing_suite.sh
 LS_STD_LAMBDA = 0.1
 LS_STD_TOP = 0.25
@@ -303,7 +308,7 @@ def dmf_filter_ok(dataset: str, model: str, method: str) -> Tuple[bool, str]:
     return True, ""
 
 
-DEFAULT_ABLATIONS_DIR = "/home/model_editing/data/ablations"
+DEFAULT_ABLATIONS_DIR = os.environ.get("ABLATIONS_DIR", str(_paths.ablations_dir_default()))
 
 
 def _ablation_basename_prefix(method: str, dataset: str, model: str, seed: int, ckpt_path: Path) -> str:

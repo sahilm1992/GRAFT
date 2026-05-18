@@ -12,7 +12,10 @@ from copy import deepcopy
 from typing import Dict, List, Any, Tuple, Optional
 import pandas as pd
 import numpy as np
-import os 
+import os
+from pathlib import Path
+
+import paths as graft_paths
 import matplotlib.pyplot as plt
 import torch
 import torch.nn.functional as F
@@ -65,9 +68,6 @@ from editing_pipelines.utils.metrics import compute_full_auc_pr_by_split
 from editing_pipelines.utils.model_io import detect_backbone_module, log_forward_mode   
 
 
-# Import from seed-gnn directory
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
 from edit_gnn.utils import grab_input  # noqa: E402
 from sklearn.metrics import average_precision_score
 from sklearn.preprocessing import label_binarize
@@ -98,10 +98,12 @@ class LeastSquaresEditor(BaseEditor):
             suffix_parts.append("onlycorrect")
         suffix = "_".join(str(part) for part in suffix_parts if part is not None)
 
-        self.save_dir = (
-            f"/home/model_editing/data/editing_pipelines/leastsquares/"
-            f"visualization_plots/{self.config['eval_params']['dataset']}_"
-            f"{self.config['pipeline_params']['model_name']}_{suffix}"
+        self.save_dir = str(
+            Path(graft_paths.editing_pipelines_root_default())
+            / "leastsquares"
+            / "visualization_plots"
+            / f"{self.config['eval_params']['dataset']}_"
+              f"{self.config['pipeline_params']['model_name']}_{suffix}"
         )
 
         #         # self.load_model_and_data() # REMOVED - will be called in run_editing_experiment

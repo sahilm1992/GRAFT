@@ -6,9 +6,6 @@ import torch.nn as nn
 import torch
 from torch_geometric.data import Data
 
-# Import from the seed-gnn directory
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
 import models as models
 from data import get_data, prepare_dataset
 from constants import SEED

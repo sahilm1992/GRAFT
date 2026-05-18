@@ -20,7 +20,7 @@
 #       When on, only metrics_finetune_lr0.01_ep20_* (authoritative parse in Python launcher).
 #   FEATURE_ABLATION_DETERMINISTIC=1 — ablation JSON under ABLATIONS_DIR uses no timestamp (overwrites).
 #   FEATURE_ABLATION_SKIP_EXISTING — default on (unset). Set to "0" to re-run even if output JSON exists.
-#   ABLATIONS_DIR — where ablation JSON is written / checked (default: /home/model_editing/data/ablations).
+#   ABLATIONS_DIR — where ablation JSON is written / checked (default: $PATH_TO_DATA/ablations).
 #   FEATURE_ABLATION_FILTER_DATASET — optional comma list (e.g. pokec,yelp); unset = all three.
 #   FEATURE_ABLATION_FILTER_MODEL — optional (e.g. GCN_MLP,GIN_MLP).
 #   FEATURE_ABLATION_FILTER_METHOD — optional (e.g. seed_gnn,finetune). Folder names under OUTPUT_ROOT.
@@ -30,13 +30,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+# shellcheck source=../paths.sh
+source "${REPO}/paths.sh"
 ABLATION_PY="${SCRIPT_DIR}/feature_ablation_forward.py"
 LAUNCH_PY="${SCRIPT_DIR}/launch_feature_ablation_from_metrics.py"
 
 PYTHON="${PYTHON:-python3}"
-DATASET_DIR="${DATASET_DIR:-/home/model_editing/data/seed_gnn_data/dataset}"
-PRETRAIN_DIR="${PRETRAIN_DIR:-/home/model_editing/data/seed_gnn_data/edit_ckpts}"
-OUTPUT_ROOT="${OUTPUT_ROOT:-/home/model_editing/data/editing_pipelines}"
 
 # When unset: require top_fraction == 0.25 for every method (see launch_feature_ablation_from_metrics.py).
 FEATURE_ABLATION_REQUIRE_TOP_FRACTION="${FEATURE_ABLATION_REQUIRE_TOP_FRACTION-0.25}"
@@ -47,7 +47,7 @@ LEASTSQUARES_STANDARD_HPARAMS="${LEASTSQUARES_STANDARD_HPARAMS-1}"
 
 # When unset: finetune only lr=0.01, ep=20. Disable with FINETUNE_STANDARD_HPARAMS=0
 FINETUNE_STANDARD_HPARAMS="${FINETUNE_STANDARD_HPARAMS-1}"
-ABLATIONS_DIR="${ABLATIONS_DIR:-/home/model_editing/data/ablations}"
+ABLATIONS_DIR="${ABLATIONS_DIR:-${PATH_TO_DATA}/ablations}"
 FEATURE_ABLATION_SKIP_EXISTING="${FEATURE_ABLATION_SKIP_EXISTING-1}"
 
 export ABLATION_PY DATASET_DIR PRETRAIN_DIR OUTPUT_ROOT PYTHON LEASTSQUARES_STRATEGY_ALLOWLIST LEASTSQUARES_STANDARD_HPARAMS FINETUNE_STANDARD_HPARAMS FEATURE_ABLATION_REQUIRE_TOP_FRACTION FEATURE_ABLATION_FILTER_DATASET FEATURE_ABLATION_FILTER_MODEL FEATURE_ABLATION_FILTER_METHOD ABLATIONS_DIR FEATURE_ABLATION_SKIP_EXISTING

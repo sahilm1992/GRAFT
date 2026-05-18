@@ -25,6 +25,10 @@ Example usage:
     raw_results, processed_results = editor.run_editing_experiment()
 """
 
+from ._ensure_repo_paths import bootstrap
+
+bootstrap()
+
 from editing_pipelines.editors.base import BaseEditor
 from editing_pipelines.editors.egnn import EGNNEditor
 from editing_pipelines.editors.seed_gnn import SEEDGNNEditor

@@ -28,11 +28,12 @@ case "${METHOD_RAW}" in
 esac
 
 SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(cd "${SCRIPT_DIR}/.." && pwd)"
+# shellcheck source=../paths.sh
+source "${REPO}/paths.sh"
 RUN_EDIT_SH="${SCRIPT_DIR}/run_edit.sh"
 
-DATASET_DIR="${DATASET_DIR:-/home/model_editing/data/seed_gnn_data/dataset}"
-PRETRAIN_DIR="${PRETRAIN_DIR:-/home/model_editing/data/seed_gnn_data/edit_ckpts}"
-OUTPUT_ROOT="${OUTPUT_ROOT:-/home/model_editing/data/editing_pipelines/time_ablation}"
+OUTPUT_ROOT="${OUTPUT_ROOT:-${PATH_TO_DATA}/editing_pipelines/time_ablation}"
 
 SEED=42
 LAYERS=(2 3 5)

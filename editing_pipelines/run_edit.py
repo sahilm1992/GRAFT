@@ -6,12 +6,15 @@ import argparse
 import logging
 from pathlib import Path
 
-ROOT = str(Path(__file__).resolve().parents[1])
-SEED_GNN = os.path.join(ROOT, 'seed-gnn')
+_REPO = Path(__file__).resolve().parent.parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
 
-# Ensure imports
-sys.path.insert(0, ROOT)
-sys.path.insert(0, SEED_GNN)
+from editing_pipelines._ensure_repo_paths import bootstrap
+
+bootstrap()
+
+import paths as _paths
 
 from editing_pipelines import create_editor, get_method_description  # noqa: E402
 
@@ -270,9 +273,12 @@ def main():
         help='Strategy controlling representative selection and steering signals.',
     )
     parser.add_argument('--strategy', default='', help='Target selection strategy')
-    parser.add_argument('--dataset-dir', default=os.path.join(SEED_GNN))
-    parser.add_argument('--pretrain-dir', default=os.path.join(SEED_GNN, 'pretrained_models'))
-    parser.add_argument('--output-dir', default=os.path.join(ROOT, 'editing_pipelines', 'output'))
+    parser.add_argument('--dataset-dir', default=str(_paths.dataset_dir_default()))
+    parser.add_argument('--pretrain-dir', default=str(_paths.pretrain_edit_ckpts_dir_default()))
+    parser.add_argument(
+        '--output-dir',
+        default=str(_paths.editing_pipelines_root_default() / 'output'),
+    )
     parser.add_argument('--lambda-reg', type=float, default=None)
     parser.add_argument('--top-fraction', type=float, default=None)
     parser.add_argument('--num-layers', type=int, default=None)

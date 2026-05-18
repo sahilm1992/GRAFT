@@ -4,9 +4,8 @@ import logging
 import torch
 import torch.nn.functional as F
 
-# Import from the seed-gnn directory
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
+
+
 from edit_gnn.utils import grab_input
 
 logger = logging.getLogger("main")

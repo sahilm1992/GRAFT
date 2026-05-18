@@ -24,7 +24,7 @@ both ``--metrics-json`` and ``--edited-checkpoint``; the edited ``.pt`` is resol
 ``--output-root/<method>/<dataset>/<model>/checkpoints/`` via ``edit_checkpoint_resolve`` (same naming
 as the editors).
 
-By default, results are written under ``/home/model_editing/data/ablations/`` (see ``--ablations-dir``)
+By default, results are written under ``${PATH_TO_DATA}/ablations`` (see ``paths.py`` / ``--ablations-dir``)
 with a timestamp in the filename. Use ``--deterministic-ablation-filename`` or environment variable
 ``FEATURE_ABLATION_DETERMINISTIC=1`` for a stable path that re-runs overwrite.
 Pass ``--dataset-dir`` if your graphs live elsewhere (default matches ``run_editing_suite.sh``).
@@ -59,16 +59,21 @@ import numpy as np
 import torch
 
 ROOT = Path(__file__).resolve().parents[1]
-SEED_GNN = ROOT / "seed-gnn"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from editing_pipelines._ensure_repo_paths import bootstrap
+
+bootstrap()
+
+import paths as _paths
 
 # Mirrors editing_pipelines/run_editing_suite.sh DATASET_DIR; `get_data` expects CSVs here
 # (e.g. ``<dataset_dir>/pokec/region_job_2.csv``), not the repo ``seed-gnn`` root.
-DEFAULT_DATASET_DIR = os.getenv(
-    "DATASET_DIR",
-    "/home/model_editing/data/seed_gnn_data/dataset",
-)
-sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(SEED_GNN))
+DEFAULT_DATASET_DIR = os.getenv("DATASET_DIR", str(_paths.dataset_dir_default()))
+DEFAULT_PRETRAIN_DIR = os.getenv("PRETRAIN_DIR", str(_paths.pretrain_edit_ckpts_dir_default()))
+DEFAULT_OUTPUT_ROOT = os.getenv("OUTPUT_ROOT", str(_paths.editing_pipelines_root_default()))
+DEFAULT_ABLATIONS_DIR = Path(os.environ.get("ABLATIONS_DIR", str(_paths.ablations_dir_default())))
 
 from editing_pipelines.run_edit import build_config  # noqa: E402
 from editing_pipelines.suite_feature_maps import apply_suite_sensitive_feature_config  # noqa: E402
@@ -79,11 +84,6 @@ from editing_pipelines.edit_checkpoint_resolve import (  # noqa: E402
 from editing_pipelines.utils.metrics import compute_full_auc_pr_by_split  # noqa: E402
 from editing_pipelines.utils.model_io import load_model  # noqa: E402
 from editing_pipelines.utils.results import perturb_feature_and_measure_probs  # noqa: E402
-from edit_gnn.utils import prediction, test as seed_test  # noqa: E402
-
-logger = logging.getLogger("feature_ablation")
-
-DEFAULT_ABLATIONS_DIR = Path("/home/model_editing/data/ablations")
 
 
 # ---------------------------------------------------------------------------
@@ -527,11 +527,11 @@ def main() -> None:
     )
     parser.add_argument(
         "--pretrain-dir",
-        default="/home/model_editing/data/seed_gnn_data/edit_ckpts",
+        default=DEFAULT_PRETRAIN_DIR,
     )
     parser.add_argument(
         "--output-root",
-        default="/home/model_editing/data/editing_pipelines",
+        default=DEFAULT_OUTPUT_ROOT,
         help=(
             "With no --metrics-json / --edited-checkpoint, checkpoints are resolved under "
             "<output-root>/<method>/<dataset>/<model>/checkpoints/ (same as run_edit.sh)."

@@ -140,7 +140,7 @@ config = {
 Run the test suite to verify the framework:
 
 ```bash
-cd /home/model_editing/gnn-editing-exploration/editing_pipelines
+cd /home/model_editing/GRAFT/editing_pipelines
 python test_framework.py
 ```
 

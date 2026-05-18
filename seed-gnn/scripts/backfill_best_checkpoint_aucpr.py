@@ -24,16 +24,18 @@ import torch
 
 
 def _add_repo_paths() -> None:
-    script_path = Path(__file__).resolve()
-    seed_gnn_root = script_path.parents[1]
-    repo_root = script_path.parents[2]
-    for p in (seed_gnn_root, repo_root):
-        p_str = str(p)
-        if p_str not in sys.path:
-            sys.path.insert(0, p_str)
+    repo_root = Path(__file__).resolve().parents[2]
+    rr = str(repo_root)
+    if rr not in sys.path:
+        sys.path.insert(0, rr)
+    from editing_pipelines._ensure_repo_paths import bootstrap
+
+    bootstrap()
 
 
 _add_repo_paths()
+
+import paths as _paths  # noqa: E402
 
 from editing_pipelines.utils.metrics import compute_full_auc_pr_by_split  # noqa: E402
 from editing_pipelines.utils.model_io import load_model  # noqa: E402
@@ -54,13 +56,13 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--results-root",
         type=str,
-        default="/home/model_editing/data/seed_gnn_data/results/seed_gnn",
+        default=str(_paths.seed_gnn_results_dir_default()),
         help="Root directory containing metrics_pretrain_*.json files.",
     )
     parser.add_argument(
         "--dataset-dir",
         type=str,
-        default="/home/model_editing/data/seed_gnn_data/dataset",
+        default=str(_paths.dataset_dir_default()),
         help="Dataset root passed to seed-gnn get_data().",
     )
     parser.add_argument(

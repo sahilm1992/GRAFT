@@ -28,6 +28,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 SCRIPT_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(SCRIPT_DIR.parent))
+import paths as _paths  # noqa: E402
+
 sys.path.insert(0, str(SCRIPT_DIR))
 import launch_feature_ablation_from_metrics as L
 
@@ -201,9 +204,7 @@ def main() -> int:
     ap.add_argument(
         "--output-root",
         type=Path,
-        default=Path(
-            os.environ.get("OUTPUT_ROOT", "/home/model_editing/data/editing_pipelines")
-        ),
+        default=Path(os.environ.get("OUTPUT_ROOT", str(_paths.editing_pipelines_root_default()))),
     )
     ap.add_argument(
         "--ablations-dir",

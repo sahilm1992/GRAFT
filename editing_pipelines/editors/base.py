@@ -20,9 +20,8 @@ from editing_pipelines.utils.editing_ops import edit
 from editing_pipelines.utils.visualization import visualize_validation
 from editing_pipelines.utils.results import process_edit_results, process_raw_exp_results
 
-# Import from seed-gnn directory
-import sys
-sys.path.append('/home/model_editing/gnn-editing-exploration/seed-gnn')
+
+
 from models.base import BaseModel
 
 logger = logging.getLogger("main")

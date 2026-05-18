@@ -18,7 +18,12 @@ if TYPE_CHECKING:
 
 
 def default_output_folder_dir(method: str, dataset: str, model: str, root: Optional[str] = None) -> str:
-    base = root or "/home/model_editing/data/editing_pipelines"
+    if root:
+        base = root
+    else:
+        import paths as _paths
+
+        base = str(_paths.editing_pipelines_root_default())
     return os.path.abspath(os.path.join(base, method, dataset, model))
 
 
