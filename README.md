@@ -2,6 +2,8 @@
 
 GRAFT contains code and shell drivers for gradient-free editing experiments on graph neural networks.
 
+![GRAFT](GRAFT.png)
+
 ## Overview
 
 - `run_*.sh` scripts live under `ablations/`, `editing_pipelines/`, and `seed-gnn/` and are the usual entrypoints for batch jobs.
@@ -45,9 +47,9 @@ The working environment is captured as conda env `**gnn_edit`**:
 
 - `run_feature_ablation_all_checkpoints.sh` — Finds `metrics_*.json` under `OUTPUT_ROOT` for pokec / bail / yelp, GCN_MLP / GIN_MLP / Polynormer, and methods leastsquares / finetune / egnn / seed_gnn. Delegates to `launch_feature_ablation_from_metrics.py` → `feature_ablation_forward.py`. Supports `FEATURE_ABLATION_FILTER_*`, `DRY_RUN=1`, and `FEATURE_ABLATION_SKIP_EXISTING`.
 
-### Seed-GNN pretraining (`seed-gnn/`)
+### Pretraining (`seed-gnn/`)
 
-- **[`run.sh`](seed-gnn/run.sh)** — Main vanilla pretraining loop: configure the `datasets`, `models`, `seeds`, and `num_layers` arrays plus optional **feature-ablation** block at the top of the script, then it calls `scripts/pretrain/seed_gnn/<dataset>.sh` per combination (two path arguments: output root and dataset dir appear as `~/data/seed_gnn_data` / `~/data/seed_gnn_data/dataset` in the defaults—adjust to match your `paths.sh` layout). Accepts **`--architectures`**, **`--gat_optimized`**, **`--neighbor_batch_size`**, and **`--neighbor_num_neighbors`** forwarded to each pretrain invocation.
+- `**[run.sh](seed-gnn/run.sh)`** — Main vanilla pretraining loop: configure the `datasets`, `models`, `seeds`, and `num_layers` arrays plus optional **feature-ablation** block at the top of the script, then it calls `scripts/pretrain/seed_gnn/<dataset>.sh` per combination (two path arguments: output root and dataset dir appear as `~/data/seed_gnn_data` / `~/data/seed_gnn_data/dataset` in the defaults—adjust to match your `paths.sh` layout). Accepts `**--architectures`**, `**--gat_optimized**`, `**--neighbor_batch_size**`, and `**--neighbor_num_neighbors**` forwarded to each pretrain invocation.
 - `run_node_regression.sh` — Pretrain on node-regression sets (e.g. twitch-views, artnet-views); sweeps gcn/sage/gin/gat, seeds, depth via `scripts/pretrain/seed_gnn/`.
 - `run_feature_drop_pretrain_suite.sh` — Pretrain with one sensitive column dropped per dataset (default pokec/bail/yelp/tfinance), aligned with editing suite attribute names; outputs under `edit_ckpts_feature_ablated/.../no_<feature>/`. Arguments after `--` forward to `main.py`.
 - `run_feature_drop_pretrain_regression.sh` — Same pattern for regression graphs and their sensitive columns.
