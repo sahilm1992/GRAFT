@@ -2,7 +2,7 @@
 
 GRAFT contains code and shell drivers for gradient-free editing experiments on graph neural networks.
 
-![GRAFT](GRAFT.png)
+![GRAFT](GRAFT.jpg)
 
 ## Overview
 
