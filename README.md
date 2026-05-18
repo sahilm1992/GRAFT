@@ -4,7 +4,7 @@ GRAFT contains code and shell drivers for gradient-free editing experiments on g
 
 ## Overview
 
-- `**run_*.sh` scripts** live under `ablations/`, `editing_pipelines/`, and `seed-gnn/` and are the usual entrypoints for batch jobs.
+- `run_*.sh` scripts live under `ablations/`, `editing_pipelines/`, and `seed-gnn/` and are the usual entrypoints for batch jobs.
 - **Path defaults**: Repo-root `[paths.py](paths.py)` and `[paths.sh](paths.sh)` set `PATH_TO_GRAFT` (default: the repository containing those files, typically `/home/model_editing/GRAFT`) and `PATH_TO_DATA` (default `/home/model_editing/data`). Shell drivers `source paths.sh`; override locations with env vars (`DATASET_DIR`, `PRETRAIN_DIR`, etc. still work as documented in each script).
 - **Dataset preparation**: Import **raw** graphs **dataset-by-dataset** from the canonical repos, preprocess to match this codebase’s CSV layout under `DATASET_DIR` (see `[paths.sh](paths.sh)`), and respect each publisher’s license.  
 **[GADBench](https://github.com/squareRoot3/GADBench/tree/master)** — anomaly / fraud benchmarks used here include **YelpChi** (mapped as **yelp**) and **T‑Finance** (mapped as **tfinance**); use its `[datasets](https://github.com/squareRoot3/GADBench/tree/master/datasets)` tree and preprocessing notebook as in that README.  
@@ -32,23 +32,23 @@ The working environment is captured as conda env `**gnn_edit`**:
 
 **Hub**
 
-- `**run_edit.sh`** — Wraps `[run_edit.py](editing_pipelines/run_edit.py)`: method, dataset, model, seed, target counts, max steps, strategies, and data/pretrain/output paths. Reads optional hyperparameters from the environment (`LAMBDA_REG`, `TOP_FRACTION`, `NUM_LAYERS`, `GAMMA_RETAIN`, `FT_EPOCHS`, `FT_LR`, `PR_ALPHA`, `RANK_MIX_TAU`). Sets `PYTHONPATH` via `[paths.sh](paths.sh)`.
+- `run_edit.sh` — Wraps `[run_edit.py](editing_pipelines/run_edit.py)`: method, dataset, model, seed, target counts, max steps, strategies, and data/pretrain/output paths. Reads optional hyperparameters from the environment (`LAMBDA_REG`, `TOP_FRACTION`, `NUM_LAYERS`, `GAMMA_RETAIN`, `FT_EPOCHS`, `FT_LR`, `PR_ALPHA`, `RANK_MIX_TAU`). Sets `PYTHONPATH` via `[paths.sh](paths.sh)`.
 
 **Parameter sweeps** (loop and call `run_edit.sh`)
 
-- `**run_editing_suite.sh`** — Large least-squares grid: λ, top fraction, depth, many `LS_STRATEGY` modes (or `LS_STRATEGY_GROUPS`), optional PageRank/DivRank sweeps (`PR_ALPHAS`, `RANK_MIX_TAUS`). Uses `run_edit.sh` with `--debug`.
-- `**run_seed_gnn.sh**` — Seed-GNN baseline over datasets, models, seeds, top fractions, depth (`NUM_LAYERS` / `LAYERS_OVERRIDE`).
-- `**run_egnn.sh**` — EGNN baseline; same idea, optional `layers_<n>/top_<frac>` paths when layers are overridden.
-- `**run_finetune.sh**` — Finetune baseline over models, seeds, top fraction, `FT_EPOCHS` / `FT_LR`, and depth.
+- `run_editing_suite.sh` — Large least-squares grid: λ, top fraction, depth, many `LS_STRATEGY` modes (or `LS_STRATEGY_GROUPS`), optional PageRank/DivRank sweeps (`PR_ALPHAS`, `RANK_MIX_TAUS`). Uses `run_edit.sh` with `--debug`.
+- `run_seed_gnn.sh` — Seed-GNN baseline over datasets, models, seeds, top fractions, depth (`NUM_LAYERS` / `LAYERS_OVERRIDE`).
+- `run_egnn.sh` — EGNN baseline; same idea, optional `layers_<n>/top_<frac>` paths when layers are overridden.
+- `run_finetune.sh` — Finetune baseline over models, seeds, top fraction, `FT_EPOCHS` / `FT_LR`, and depth.
 
 ### Ablations (`ablations/`)
 
-- `**run_feature_ablation_all_checkpoints.sh**` — Finds `metrics_*.json` under `OUTPUT_ROOT` for pokec / bail / yelp, GCN_MLP / GIN_MLP / Polynormer, and methods leastsquares / finetune / egnn / seed_gnn. Delegates to `launch_feature_ablation_from_metrics.py` → `feature_ablation_forward.py`. Supports `FEATURE_ABLATION_FILTER_*`, `DRY_RUN=1`, and `FEATURE_ABLATION_SKIP_EXISTING`.
+- `run_feature_ablation_all_checkpoints.sh` — Finds `metrics_*.json` under `OUTPUT_ROOT` for pokec / bail / yelp, GCN_MLP / GIN_MLP / Polynormer, and methods leastsquares / finetune / egnn / seed_gnn. Delegates to `launch_feature_ablation_from_metrics.py` → `feature_ablation_forward.py`. Supports `FEATURE_ABLATION_FILTER_*`, `DRY_RUN=1`, and `FEATURE_ABLATION_SKIP_EXISTING`.
 
 ### Seed-GNN pretraining (`seed-gnn/`)
 
 - **[`run.sh`](seed-gnn/run.sh)** — Main vanilla pretraining loop: configure the `datasets`, `models`, `seeds`, and `num_layers` arrays plus optional **feature-ablation** block at the top of the script, then it calls `scripts/pretrain/seed_gnn/<dataset>.sh` per combination (two path arguments: output root and dataset dir appear as `~/data/seed_gnn_data` / `~/data/seed_gnn_data/dataset` in the defaults—adjust to match your `paths.sh` layout). Accepts **`--architectures`**, **`--gat_optimized`**, **`--neighbor_batch_size`**, and **`--neighbor_num_neighbors`** forwarded to each pretrain invocation.
-- `**run_node_regression.sh**` — Pretrain on node-regression sets (e.g. twitch-views, artnet-views); sweeps gcn/sage/gin/gat, seeds, depth via `scripts/pretrain/seed_gnn/`.
-- `**run_feature_drop_pretrain_suite.sh**` — Pretrain with one sensitive column dropped per dataset (default pokec/bail/yelp/tfinance), aligned with editing suite attribute names; outputs under `edit_ckpts_feature_ablated/.../no_<feature>/`. Arguments after `--` forward to `main.py`.
-- `**run_feature_drop_pretrain_regression.sh**` — Same pattern for regression graphs and their sensitive columns.
+- `run_node_regression.sh` — Pretrain on node-regression sets (e.g. twitch-views, artnet-views); sweeps gcn/sage/gin/gat, seeds, depth via `scripts/pretrain/seed_gnn/`.
+- `run_feature_drop_pretrain_suite.sh` — Pretrain with one sensitive column dropped per dataset (default pokec/bail/yelp/tfinance), aligned with editing suite attribute names; outputs under `edit_ckpts_feature_ablated/.../no_<feature>/`. Arguments after `--` forward to `main.py`.
+- `run_feature_drop_pretrain_regression.sh` — Same pattern for regression graphs and their sensitive columns.
 
