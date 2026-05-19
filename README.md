@@ -38,7 +38,7 @@ The working environment is captured as conda env `gnn_edit`:
 
 **Parameter sweeps** (loop and call `run_edit.sh`)
 
-- `run_editing_suite.sh` — Large least-squares grid: λ, top fraction, depth, many `LS_STRATEGY` modes (or `LS_STRATEGY_GROUPS`), optional PageRank/DivRank sweeps (`PR_ALPHAS`, `RANK_MIX_TAUS`). Uses `run_edit.sh` with `--debug`.
+- `run_editing_suite.sh` — Large least-squares grid: λ, top fraction, depth, many `LS_STRATEGY` modes. Uses `run_edit.sh` with `--debug`.
 - `run_seed_gnn.sh` — Seed-GNN baseline over datasets, models, seeds, top fractions, depth (`NUM_LAYERS` / `LAYERS_OVERRIDE`).
 - `run_egnn.sh` — EGNN baseline; same idea, optional `layers_<n>/top_<frac>` paths when layers are overridden.
 - `run_finetune.sh` — Finetune baseline over models, seeds, top fraction, `FT_EPOCHS` / `FT_LR`, and depth.
